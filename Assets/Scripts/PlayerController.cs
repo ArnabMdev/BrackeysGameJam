@@ -51,9 +51,17 @@ public class PlayerController : MonoBehaviour
     }
     private void MyInput()
     {
-        //if (isPlayer2)
-            float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        float x, y;
+        if (isPlayer2)
+        {
+            x = Input.GetAxisRaw("Horizontal");
+            y = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            x = Input.GetAxisRaw("Horizontal2");
+            y = Input.GetAxisRaw("Vertical2");
+        }
 
         moveDir = new Vector2(x, y).normalized * speed;
         //ChangeAnim();
