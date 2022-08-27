@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,12 +13,17 @@ public class GameManager : MonoBehaviour
 
     enum UiLevel
     {
-        start,gameover,ingame,death
+        start,
+        gameover,
+        ingame,
+        death
     };
+
     UiLevel uiLevel;
 
-    public GameObject player1;
-    public GameObject player2;
+    [SerializeField]private GameObject player1;
+    [SerializeField]private GameObject player2;
+    [SerializeField]private CinemachineVirtualCamera vcam;
 
     public GameObject StartMenu;
     public GameObject InGameMenu;
@@ -78,7 +84,7 @@ public class GameManager : MonoBehaviour
         playerDied = false;
         uiLevel = UiLevel.ingame;
         levelStage = 0;
-        SpawnPlayer();
+        //SpawnPlayer();
     }
 
     public void Restart()
@@ -86,7 +92,7 @@ public class GameManager : MonoBehaviour
         playerDied=false;
         uiLevel = UiLevel.ingame;
         levelStage = 0;
-        SpawnPlayer();
+       // SpawnPlayer();
     }
     public void GoToMenu()
     {
@@ -108,14 +114,12 @@ public class GameManager : MonoBehaviour
         levelStage++;
         if (levelStage >= playerSpawns.Length)
         {
-            //Show Game Completing UI
-            //Stop moving Player
             GameComplete();
 
         }
         else
         {
-            SpawnPlayer();
+            //SpawnPlayer();
         }
     }
 
@@ -128,9 +132,10 @@ public class GameManager : MonoBehaviour
     {
         
         GameObject p1 = Instantiate(player1, new Vector2(playerSpawns[levelStage].position.x - 3f, playerSpawns[levelStage].position.y), playerSpawns[levelStage].rotation);
-        Camera.main.GetComponent<CameraController>().target = p1.transform;
+        GameObject p2 = Instantiate(player2, new Vector2(playerSpawns[levelStage].position.x - 3f, playerSpawns[levelStage].position.y), playerSpawns[levelStage].rotation);
+
         
-        //Instantiate(player2,new Vector2( playerSpawns[levelStage].position.x + 3f, playerSpawns[levelStage].position.y), playerSpawns[levelStage].rotation);
+        
     }
 
 
