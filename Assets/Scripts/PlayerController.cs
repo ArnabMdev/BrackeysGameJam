@@ -10,13 +10,14 @@ public class PlayerController : MonoBehaviour
     RaycastHit2D hit;
     [SerializeField] float colCheckDistance = 5f;
     public LayerMask whatIsWall;
-    private Animator m_characterAnimator;
+    //private Animator m_characterAnimator;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-        m_characterAnimator = GetComponent<Animator>();
+        //m_characterAnimator = GetComponent<Animator>();
     }
     private void Update()
     {
@@ -27,36 +28,38 @@ public class PlayerController : MonoBehaviour
 
         if (hit.collider == null)
         {
+            if(!GameManager.instance.playerDied)
             transform.Translate(0, moveDir.y * Time.deltaTime, 0);
 
         }
-        else
+        /*else
         {
             Debug.Log(hit.collider.name);
-        }
+        }*/
         hit = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), boxCollider2D.size, 0, new Vector2(moveDir.x, 0), Mathf.Abs(moveDir.x * Time.deltaTime), LayerMask.GetMask("Entity", "Blocking"));
 
         if (hit.collider == null)
         {
-            transform.Translate(moveDir.x * Time.deltaTime, 0, 0);
+            if (!GameManager.instance.playerDied)
+                transform.Translate(moveDir.x * Time.deltaTime, 0, 0);
 
         }
-        else
+        /*else
         {
             Debug.Log(hit.collider.name);
-        }
+        }*/
     }
     private void MyInput()
     {
-        if (isPlayer2)
+        //if (isPlayer2)
             float x = Input.GetAxisRaw("Horizontal");
         float y = Input.GetAxisRaw("Vertical");
 
         moveDir = new Vector2(x, y).normalized * speed;
-        ChangeAnim();
+        //ChangeAnim();
     }
 
-    private void ChangeAnim()
+    /*private void ChangeAnim()
     {
         Vector2 vel = moveDir;
         if (vel.x > 0)
@@ -123,8 +126,8 @@ public class PlayerController : MonoBehaviour
         {
             toSet = 6;
         }
-        m_characterAnimator.SetInteger("AnimIdx", toSet);
-    }
+        //m_characterAnimator.SetInteger("AnimIdx", toSet);
+    }*/
 
     public void death()
     {
