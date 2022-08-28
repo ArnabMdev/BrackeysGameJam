@@ -2,28 +2,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    bool isPlayer2 = false;
-    public float speed = 10f;
-    private Vector2 moveDir = Vector2.zero;
+    [SerializeField]private bool isPlayer2 = false;
+    [SerializeField]private float speed;
+    
+    
+    private Vector2 moveDir;
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider2D;
-    RaycastHit2D hit;
-    [SerializeField] float colCheckDistance = 5f;
-    public LayerMask whatIsWall;
-    //private Animator m_characterAnimator;
+    private RaycastHit2D hit;
+    
+    [SerializeField]private LayerMask whatIsWall;
+    private Animator m_characterAnimator;
 
 
+
+    private void Awake()
+    {
+        moveDir = Vector2.zero;
+    }
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-        //m_characterAnimator = GetComponent<Animator>();
+        m_characterAnimator = GetComponent<Animator>();
     }
     private void Update()
     {
         MyInput();
-        //Collision in y direction
-        //hit = Physics2D.BoxCast(new Vector2(transform.position.x,transform.position.y), boxCollider2D.size, 0, new Vector2(0, moveDir.y), colCheckDistance,whatIsWall);
         hit = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), boxCollider2D.size, 0, new Vector2(0, moveDir.y), Mathf.Abs(moveDir.y * Time.deltaTime), LayerMask.GetMask("Entity", "Blocking"));
 
         if (hit.collider == null)
@@ -32,10 +37,6 @@ public class PlayerController : MonoBehaviour
             transform.Translate(0, moveDir.y * Time.deltaTime, 0);
 
         }
-        /*else
-        {
-            Debug.Log(hit.collider.name);
-        }*/
         hit = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), boxCollider2D.size, 0, new Vector2(moveDir.x, 0), Mathf.Abs(moveDir.x * Time.deltaTime), LayerMask.GetMask("Entity", "Blocking"));
 
         if (hit.collider == null)
@@ -44,22 +45,26 @@ public class PlayerController : MonoBehaviour
                 transform.Translate(moveDir.x * Time.deltaTime, 0, 0);
 
         }
-        /*else
-        {
-            Debug.Log(hit.collider.name);
-        }*/
     }
     private void MyInput()
     {
-        //if (isPlayer2)
-            float x = Input.GetAxisRaw("Horizontal");
-        float y = Input.GetAxisRaw("Vertical");
+        float x, y;
+        if (isPlayer2)
+        {
+            x = Input.GetAxisRaw("Horizontal");
+            y = Input.GetAxisRaw("Vertical");
+        }
+        else
+        {
+            x = Input.GetAxisRaw("Horizontal2");
+            y = Input.GetAxisRaw("Vertical2");
+        }
 
         moveDir = new Vector2(x, y).normalized * speed;
-        //ChangeAnim();
+        ChangeAnim();
     }
 
-    /*private void ChangeAnim()
+    private void ChangeAnim()
     {
         Vector2 vel = moveDir;
         if (vel.x > 0)
@@ -126,8 +131,8 @@ public class PlayerController : MonoBehaviour
         {
             toSet = 6;
         }
-        //m_characterAnimator.SetInteger("AnimIdx", toSet);
-    }*/
+        m_characterAnimator.SetInteger("AnimIdx", toSet);
+    }
 
     public void death()
     {
